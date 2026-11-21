@@ -24,12 +24,11 @@ def lire_entier(question, minimum, maximum):
             return valeur
         print(f"Veuillez entrer un entier entre {minimum} et {maximum}.")
 
-# nb = lire_entier("Nombre de colis (1 à 20) : ",1,20)
-# print("Colis à livrer :", nb)
 def verifier_montant(montant):
     if not (MONTANT_MIN <= montant <= MONTANT_MAX):
        raise ValueError(f"Le montant doit être compris entre {MONTANT_MIN} et {MONTANT_MAX}.")
     return montant
+
 def lire_montant(question):
     while True:
         texte = input(question).replace(" ", "")
@@ -37,10 +36,7 @@ def lire_montant(question):
             montant = int(texte)
             return verifier_montant(montant)
         except ValueError as e:
-            print(f"Montant refusé ({e})")
-
-# montant_valide = lire_montant("Montant à envoyer (500 à 500 000 F) : ")
-# print(f"{montant_valide} est accepté")
+            print(f"Montant refusé ({e}). Saisissez un montant entre {MONTANT_MIN} et {MONTANT_MAX}.")
 
 def lire_poids(question):
     while True:
@@ -48,15 +44,12 @@ def lire_poids(question):
         try:
             poids = float(texte)
         except ValueError:
-            print(f"« {texte} » n'est pas un poids.")
+            print(f"« {texte} » n'est pas un poids. Saisissez un nombre positif (ex. 2,5).")
             continue
         if poids <= 0:
-            print("Le poids doit être positif.")
+            print("Le poids doit être positif. Saisissez un nombre supérieur à 0.")
             continue
         return poids
-
-# poids_colis = lire_poids("Poids du colis (kg) : ")
-# print(f"{poids_colis} kg est accepté")
 
 def lire_date(question):
     while True:
@@ -67,12 +60,9 @@ def lire_date(question):
             print(f"« {texte} » n'est pas une date valide (format attendu : jj/mm/aaaa).")
             continue
         if jour > date.today():
-            print("La date ne peut pas être dans le futur.")
+            print("La date ne peut pas être dans le futur. Saisissez la date d'aujourd'hui ou une date passée.")
             continue
         return jour
-
-# date_colis = lire_date("Date d'expédition (JJ/MM/AAAA) : ")
-# print(f"Date acceptée : {date_colis.strftime('%d/%m/%Y')}")
 
 def lire_quartier(question):
     quartiers_possibles = ", ".join(TARIFS.keys())
@@ -137,4 +127,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (KeyboardInterrupt, EOFError):
+        print("\nSaisie interrompue.")
