@@ -40,3 +40,19 @@ def lire_montant(question):
 
 montant_valide = lire_montant("Montant à envoyer (500 à 500 000 F) : ")
 print(f"{montant_valide} est accepté")
+
+def lire_poids(question):
+    while True:
+        texte = input(question).strip().replace(",", ".")
+        try:
+            poids = float(texte)
+        except ValueError:
+            print(f"« {texte} » n'est pas un poids.")
+            continue
+        if poids <= 0:
+            print("Le poids doit être positif.")
+            continue
+        return poids
+
+poids_colis = lire_poids("Poids du colis (kg) : ")
+print(f"{poids_colis} kg est accepté")
