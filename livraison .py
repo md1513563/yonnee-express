@@ -73,3 +73,23 @@ def lire_date(question):
 
 date_colis = lire_date("Date d'expédition (JJ/MM/AAAA) : ")
 print(f"Date acceptée : {date_colis.strftime('%d/%m/%Y')}")
+
+def lire_quartier(question):
+    quartiers_possibles = ", ".join(TARIFS.keys())
+    while True:
+        saisie = input(question).strip().lower()
+        for quartier in TARIFS:
+            if quartier.lower() == saisie:
+                return quartier
+        print(f"Quartier inconnu. Quartiers possibles : {quartiers_possibles}")
+
+def frais_livraison(quartier, poids):
+    if poids <= 0:
+        raise ValueError("le poids doit être positif")
+    if quartier not in TARIFS:
+        raise KeyError(f"quartier non desservi : {quartier}")
+
+    total = TARIFS[quartier]
+    if poids > POIDS_LOURD:
+        total += SUPPLEMENT_LOURD
+    return total
