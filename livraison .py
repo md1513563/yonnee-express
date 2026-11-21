@@ -24,8 +24,8 @@ def lire_entier(question, minimum, maximum):
             return valeur
         print(f"Veuillez entrer un entier entre {minimum} et {maximum}.")
 
-nb = lire_entier("Nombre de colis (1 à 20) : ",1,20)
-print("Colis à livrer :", nb)
+# nb = lire_entier("Nombre de colis (1 à 20) : ",1,20)
+# print("Colis à livrer :", nb)
 def verifier_montant(montant):
     if not (MONTANT_MIN <= montant <= MONTANT_MAX):
        raise ValueError(f"Le montant doit être compris entre {MONTANT_MIN} et {MONTANT_MAX}.")
@@ -39,8 +39,8 @@ def lire_montant(question):
         except ValueError as e:
             print(f"Montant refusé ({e})")
 
-montant_valide = lire_montant("Montant à envoyer (500 à 500 000 F) : ")
-print(f"{montant_valide} est accepté")
+# montant_valide = lire_montant("Montant à envoyer (500 à 500 000 F) : ")
+# print(f"{montant_valide} est accepté")
 
 def lire_poids(question):
     while True:
@@ -55,8 +55,8 @@ def lire_poids(question):
             continue
         return poids
 
-poids_colis = lire_poids("Poids du colis (kg) : ")
-print(f"{poids_colis} kg est accepté")
+# poids_colis = lire_poids("Poids du colis (kg) : ")
+# print(f"{poids_colis} kg est accepté")
 
 def lire_date(question):
     while True:
@@ -71,8 +71,8 @@ def lire_date(question):
             continue
         return jour
 
-date_colis = lire_date("Date d'expédition (JJ/MM/AAAA) : ")
-print(f"Date acceptée : {date_colis.strftime('%d/%m/%Y')}")
+# date_colis = lire_date("Date d'expédition (JJ/MM/AAAA) : ")
+# print(f"Date acceptée : {date_colis.strftime('%d/%m/%Y')}")
 
 def lire_quartier(question):
     quartiers_possibles = ", ".join(TARIFS.keys())
@@ -93,3 +93,48 @@ def frais_livraison(quartier, poids):
     if poids > POIDS_LOURD:
         total += SUPPLEMENT_LOURD
     return total
+
+def saisir_livraison():
+    d = lire_date("Date (JJ/MM/AAAA) : ")
+    quartier = lire_quartier("Quartier : ")
+    poids = lire_poids("Poids (kg) : ")
+    montant = lire_montant("Valeur du colis (F) : ")
+    frais = frais_livraison(quartier, poids)
+    return {
+        "date": d,
+        "quartier": quartier,
+        "poids": poids,
+        "montant": montant,
+        "frais": frais,
+    }
+
+
+def afficher(livraison: dict) -> None:
+    print(
+        f"{livraison['date']:%d/%m/%Y} | "
+        f"{livraison['quartier']:<9} | "
+        f"{livraison['poids']:>5.1f} kg | "
+        f"{livraison['montant']:>7} F | "
+        f"Frais : {livraison['frais']:>5} F"
+    )
+
+
+def main() -> None:
+    nb = lire_entier("Nombre de livraisons (1 à 20) : ", 1, 20)
+    livraisons = []
+
+    for i in range(1, nb + 1):
+        print(f"\n--- Livraison {i}/{nb} ---")
+        livraisons.append(saisir_livraison())
+
+    print("\n=== Récapitulatif ===")
+    total_frais = 0
+    for livraison in livraisons:
+        afficher(livraison)
+        total_frais += livraison["frais"]
+
+    print(f"Total des frais : {total_frais} F")
+
+
+if __name__ == "__main__":
+    main()
