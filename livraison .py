@@ -1,3 +1,4 @@
+from datetime import date, datetime
 print("=== Yonnee Express : saisie des livraisons ===")
 TARIFS = {
     "MEDINA": 1000,
@@ -56,3 +57,19 @@ def lire_poids(question):
 
 poids_colis = lire_poids("Poids du colis (kg) : ")
 print(f"{poids_colis} kg est accepté")
+
+def lire_date(question):
+    while True:
+        texte = input(question).strip()
+        try:
+            jour = datetime.strptime(texte, "%d/%m/%Y").date()
+        except ValueError:
+            print(f"« {texte} » n'est pas une date valide (format attendu : jj/mm/aaaa).")
+            continue
+        if jour > date.today():
+            print("La date ne peut pas être dans le futur.")
+            continue
+        return jour
+
+date_colis = lire_date("Date d'expédition (JJ/MM/AAAA) : ")
+print(f"Date acceptée : {date_colis.strftime('%d/%m/%Y')}")
